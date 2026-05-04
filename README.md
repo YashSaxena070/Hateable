@@ -1,51 +1,134 @@
-# Hateable
+# 🚀 Hateable
 
-Hateable is a microservices-based application implemented in this repository. It provides a modular backend of Java services and a modern TypeScript/React frontend. This README explains what Hateable does, how it works, the technologies used, the microservices architecture, and quick-start commands to run the project locally.
+> A scalable **microservices-based platform** built with Java (Spring Boot) and a modern React + TypeScript frontend.
 
-**What it does:**
-- Provides a set of cooperating microservices to power the Hateable application (user/account management, discovery, configuration, intelligence/analysis, workspace management, and an API gateway).
-- Exposes a responsive web UI (`project-companion`) for users to interact with the application.
+---
 
-**How it works (high level):**
-- A user interacts with the frontend served by `project-companion` (Vite + React + TypeScript).
-- The frontend calls an API gateway which routes requests to the appropriate backend microservice.
-- Backend microservices register with the discovery service and load configuration from the config service.
-- Services use shared libraries from `common-lib` and communicate over HTTP (and optionally other internal protocols). The intelligence service encapsulates domain-specific logic and analysis.
+## ✨ Overview
 
-**Microservices architecture and components:**
-- `api-gateway` — single entry point for frontend and external clients; routes and handles cross-cutting concerns.
-- `discovery-service` — service registry (enables dynamic discovery of services).
-- `config-service` — centralized configuration for services.
-- `account-service` — user and account management (registration, authentication, profiles).
-- `intelligence-service` — domain logic, analysis, or ML-related features.
-- `workspace-service` — per-user workspace and data management.
-- `common-lib` — shared code and utilities used across services.
+**Hateable** is a distributed system designed using microservices architecture, enabling modular development, scalability, and cloud-native deployment.
 
-Folders in this repository of interest:
-- `Distributed-Currix/` — backend microservices and related modules.
-- `project-companion/` — frontend application (Vite + React + TypeScript).
+It consists of:
 
-**Tech stack:**
-- Backend: Java (Maven) microservices. The repo includes Maven wrappers (`mvnw`, `mvnw.cmd`).
-- Frontend: Node.js, Vite, React, TypeScript.
-- Infrastructure: Docker, Kubernetes manifests under `k8s/`, and `services.docker-compose.yml` for local containers.
-- Misc: Shared libraries, build scripts, and automation helpers (examples: `sync-to-minio.ps1`).
+* ⚙️ Independent backend services
+* 🌐 API Gateway for routing
+* 🧠 Intelligence/processing service
+* 💻 Modern frontend UI
 
-**Quick start — Backend (Windows, using Maven wrapper):**
-Open a PowerShell terminal and run:
+---
 
-```powershell
-cd Distributed-Currix
-.\mvnw.cmd -DskipTests package
+## 🧩 Features
+
+* 🔐 User authentication & account management
+* 🧠 Intelligence & analysis service
+* 📁 Workspace/data management
+* 🌍 API gateway routing
+* ⚡ Scalable and modular microservices
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+    User --> Frontend
+    Frontend --> API_Gateway
+    API_Gateway --> Account_Service
+    API_Gateway --> Workspace_Service
+    API_Gateway --> Intelligence_Service
+    Account_Service --> Discovery_Service
+    Workspace_Service --> Discovery_Service
+    Intelligence_Service --> Discovery_Service
+    All_Services --> Config_Service
 ```
 
-To start services locally using Docker Compose (if you prefer containers):
+---
 
-```powershell
-docker compose -f services.docker-compose.yml up --build
+## 🧱 Microservices
+
+| Service                     | Description                  |
+| --------------------------- | ---------------------------- |
+| 🚪 **api-gateway**          | Entry point for all requests |
+| 🔍 **discovery-service**    | Service registry (Eureka)    |
+| ⚙️ **config-service**       | Centralized configuration    |
+| 👤 **account-service**      | User & authentication        |
+| 🧠 **intelligence-service** | Core logic / AI              |
+| 📁 **workspace-service**    | User workspace/data          |
+| 📦 **common-lib**           | Shared utilities             |
+
+---
+
+## 📂 Project Structure
+
+```bash
+Hateable/
+├── Distributed-Hateable/           # Backend microservices
+│   ├── api-gateway/
+│   ├── discovery-service/
+│   ├── config-service/
+│   ├── account-service/
+│   ├── workspace-service/
+│   ├── intelligence-service/
+│   ├── common-lib/
+│   ├── k8s/                        # Backend Kubernetes configs
+│   ├── services.docker-compose.yml
+│   └── mvnw / pom.xml
+│
+├── project-companion/              # Frontend (React + Vite + TypeScript)
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.ts
+│
+├── k8s/                            # Global Kubernetes configs (if any)
+├── .gitignore
+└── README.md
 ```
 
-**Quick start — Frontend:**
+---
+
+## ⚙️ Tech Stack
+
+### 🖥️ Backend
+
+* Java (Spring Boot)
+* Maven (Wrapper included)
+* Spring Cloud (Config, Eureka, Gateway)
+
+### 🌐 Frontend
+
+* React + TypeScript
+* Vite
+
+### ☁️ DevOps & Infra
+
+* Docker & Docker Compose
+* Kubernetes (K8s)
+* MinIO (object storage)
+* Redis (optional caching)
+
+---
+
+## 🚀 Quick Start
+
+### 🔹 Backend (Maven)
+
+```powershell
+cd Distributed-Hateable
+.\mvnw.cmd clean install -DskipTests
+```
+
+---
+
+### 🔹 Run with Docker (Recommended)
+
+```powershell
+docker compose -f Distributed-Hateable/services.docker-compose.yml up --build
+```
+
+---
+
+### 🔹 Frontend
 
 ```bash
 cd project-companion
@@ -53,14 +136,52 @@ npm install
 npm run dev
 ```
 
-**Notes & where to look next:**
-- Backend service code and their `pom.xml` files are inside `Distributed-Currix/` and subfolders.
-- Frontend source and configuration live inside `project-companion/src/` and `project-companion/vite.config.ts`.
-- Kubernetes manifests for deployment are in `k8s/` and `Distributed-Currix/k8s/` (when present).
+---
 
-If you'd like, I can:
-- Add detailed, runnable `README.md` files inside `Distributed-Currix/` and `project-companion/` with service-by-service run instructions and environment examples.
-- Produce a simple architecture diagram (ASCII or Mermaid) and add it to this README.
+## 🔐 Environment Variables
+
+> ⚠️ Never commit secrets. Use `.env` or environment variables.
+
+Example:
+
+```env
+GIT_USERNAME=your_username
+GIT_PASSWORD=your_token
+JWT_SECRET=your_secret
+STRIPE_API_KEY=your_key
+```
 
 ---
-If you want me to add the per-subproject READMEs now, tell me which level of detail you prefer (quick-start only, or full dev+debug steps). 
+
+## 🧪 Development Notes
+
+* Use `.env.example` for sharing config structure
+* Use Docker for consistent local setup
+* Use Kubernetes for production deployment
+
+---
+
+## 📌 Highlights
+
+* ⚡ Microservices architecture
+* 🔄 Service discovery & centralized config
+* 🧠 Extendable intelligence layer
+* 🌍 Cloud-ready deployment
+
+---
+
+## 🤝 Contributing
+
+Feel free to fork and contribute 🚀
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+## ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub!
