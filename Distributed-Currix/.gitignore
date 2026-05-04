@@ -1,0 +1,6 @@
+# ignore env files everywhere
+.env
+*.env
+
+# specifically for safety
+/k8s/.env
